@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -32,7 +33,8 @@ class BankApplicationTests {
     ObjectMapper objectMapper;
 
 
-    private String jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhcmVyem9vZWVvIiwiZXhwIjoxNjgzOTY3NjEyLCJpYXQiOjE2ODM5NjQ2MTJ9.wOf0dm7ui0dGZACX_5p0IsnzPEBQ4R2xjTZrdhxMgUkcHOSpb1By08YNwkCGtuJXgvySgQaUXvtV42zCD_RJEg";
+    @Value("${auth.token}")
+    private String jwtToken ;
 
     @Test
     void contextLoads() {
@@ -43,7 +45,7 @@ class BankApplicationTests {
     public void testHappyPayment() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/payment").header("jwt", jwtToken)
+                        .post("/bank/payment").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(PaymentRequest.builder()
                                 .amount(500L).
                                 cardNumber("6104337722156021").
@@ -61,7 +63,7 @@ class BankApplicationTests {
     public void testExceptionPayment() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/payment").header("jwt", jwtToken)
+                        .post("/bank/payment").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(PaymentRequest.builder()
                                 .amount(500L).
                                 cardNumber("610422156021").
@@ -80,7 +82,7 @@ class BankApplicationTests {
     public void testExceptionPaymentForAuthorization() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/payment").header("jwt", 555)
+                        .post("/bank/payment").header("Authorization", "tst")
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(PaymentRequest.builder()
                                 .amount(500L).
                                 cardNumber("6104337722156021").
@@ -88,8 +90,8 @@ class BankApplicationTests {
                                 cvv2("478").
                                 expireTime("05-04")
                                 .build())))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Authorization_Failed_Login_Again"));
+                .andExpect(status().isUnauthorized());
+
 
 
     }
@@ -99,7 +101,7 @@ class BankApplicationTests {
     public void testHappyCard() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/card").header("jwt", jwtToken)
+                        .post("/bank/card").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(CardRequest.builder()
                                 .amount(500L).
                                 DestinationCardNumber("6104337722156021")
@@ -118,7 +120,7 @@ class BankApplicationTests {
     public void testExceptionCard() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/card").header("jwt", jwtToken)
+                        .post("/bank/card").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(CardRequest.builder()
                                 .amount(500L).
                                 DestinationCardNumber("610433772215602")
@@ -138,7 +140,7 @@ class BankApplicationTests {
     public void testExceptionCardAuthorization() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/card").header("jwt", 5555)
+                        .post("/bank/card").header("Authorization", "tst")
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(CardRequest.builder()
                                 .amount(500L).
                                 DestinationCardNumber("6104337722156021")
@@ -147,8 +149,8 @@ class BankApplicationTests {
                                 cvv2(555).
                                 expireTime("05-04")
                                 .build())))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Authorization_Failed_Login_Again"));
+                .andExpect(status().isUnauthorized());
+
 
 
     }
@@ -158,7 +160,7 @@ class BankApplicationTests {
     public void testHappyAccount() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/account").header("jwt", jwtToken)
+                        .post("/bank/account").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(AccountRequest.builder()
                                 .amount(500L)
                                 .DestinationAccountNumber("1234567891")
@@ -174,7 +176,7 @@ class BankApplicationTests {
     public void testExceptionAccount() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/account").header("jwt", jwtToken)
+                        .post("/bank/account").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(AccountRequest.builder()
                                 .amount(500L)
                                 .DestinationAccountNumber("1234567891")
@@ -191,14 +193,13 @@ class BankApplicationTests {
     public void testExceptionAccountAuthorization() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/account").header("jwt", 5555)
+                        .post("/bank/account").header("Authorization", "tst")
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(AccountRequest.builder()
                                 .amount(500L)
                                 .DestinationAccountNumber("1234567891")
                                 .sourceAccountNumber("1234567891")
                                 .build())))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Authorization_Failed_Login_Again"));
+                .andExpect(status().isUnauthorized());
 
 
     }
@@ -208,7 +209,7 @@ class BankApplicationTests {
     public void testHappySheba() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/sheba").header("jwt", jwtToken)
+                        .post("/bank/sheba").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(ShebaPayaRequest.builder()
                                 .amount(500L)
                                 .Sheba("123456789123456789123456")
@@ -223,7 +224,7 @@ class BankApplicationTests {
     public void testExceptionSheba() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/sheba").header("jwt", jwtToken)
+                        .post("/bank/sheba").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(ShebaPayaRequest.builder()
                                 .amount(500L)
                                 .Sheba("1234567891236789123456")
@@ -239,13 +240,12 @@ class BankApplicationTests {
     public void testExceptionShebaAuthorization() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/sheba").header("jwt", 555)
+                        .post("/bank/sheba").header("Authorization", "tst")
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(ShebaPayaRequest.builder()
                                 .amount(500L)
                                 .Sheba("123456789123456789123456")
                                 .build())))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Authorization_Failed_Login_Again"));
+                .andExpect(status().isUnauthorized());
 
 
     }
@@ -255,7 +255,7 @@ class BankApplicationTests {
     public void testHappyPaya() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/paya").header("jwt", jwtToken)
+                        .post("/bank/paya").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(ShebaPayaRequest.builder()
                                 .amount(500L)
                                 .Sheba("123456789123456789123456")
@@ -270,7 +270,7 @@ class BankApplicationTests {
     public void testExceptionPaya() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/paya").header("jwt", jwtToken)
+                        .post("/bank/paya").header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(ShebaPayaRequest.builder()
                                 .amount(500L)
                                 .Sheba("123456789123678923456")
@@ -287,14 +287,12 @@ class BankApplicationTests {
     public void testExceptionPayaAuthorization() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders
-                        .post("/bank/paya").header("jwt", 555)
+                        .post("/bank/paya").header("Authorization", 555)
                         .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(ShebaPayaRequest.builder()
                                 .amount(500L)
                                 .Sheba("123456789123456789123456")
                                 .build())))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Authorization_Failed_Login_Again"));
-
+                .andExpect(status().isUnauthorized());
 
     }
 

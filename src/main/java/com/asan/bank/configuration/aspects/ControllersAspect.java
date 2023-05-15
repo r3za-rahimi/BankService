@@ -1,7 +1,8 @@
-package com.asan.bank.aspects;
+package com.asan.bank.configuration.aspects;
 
 
 import com.asan.bank.exceptionhandler.exceptions.ServiceException;
+import com.asan.bank.models.dto.AuthResponse;
 import com.asan.bank.security.AuthService;
 import com.asan.bank.security.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,11 +30,7 @@ public class ControllersAspect {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private AuthService authService;
 
-    @Autowired
-    private JwtService jwtService;
 
 
     @Before("within(com.asan.bank.controllers.AbstractController+ )")
@@ -52,23 +49,6 @@ public class ControllersAspect {
         LogModel logModel = new LogModel();
         logModel.setMethodName(joinPoint.getSignature().getName());
         logModel.setRequest(joinPoint.getArgs());
-
-
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-
-//            if (  (request.getHeader("jwt") == null) || !authService.isTokenValid(request.getHeader("jwt"))) {
-//
-//              throw new ServiceException("Authorization_Failed_Login_Again");
-//            }
-
-
-            if ( (request.getHeader("jwt") == null) || !jwtService.validUser(request.getHeader("jwt") )) {
-
-                throw new ServiceException("Authorization_Failed_Login_Again");
-            }
-        }
 
 
         Object value;

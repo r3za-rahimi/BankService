@@ -21,7 +21,6 @@ public class PaymentRequest  {
     @Pattern(regexp = "\\d{2}-\\d{2}" , message = "expire time must be like 05-04")
     private String expireTime;
 
-
     private Integer otp;
 
     private Long amount;

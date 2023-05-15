@@ -1,4 +1,4 @@
-package com.asan.bank.aspects;
+package com.asan.bank.configuration.aspects;
 
 import lombok.Data;
 

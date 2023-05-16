@@ -50,7 +50,7 @@ class BankApplicationTests {
                                 .amount(500L).
                                 cardNumber("6104337722156021").
                                 otp(5650).
-                                cvv2("478").
+                                cvv2(478).
                                 expireTime("05-04")
                                 .build())))
                 .andExpect(status().isAccepted());
@@ -68,7 +68,7 @@ class BankApplicationTests {
                                 .amount(500L).
                                 cardNumber("610422156021").
                                 otp(5650).
-                                cvv2("478").
+                                cvv2(478).
                                 expireTime("05-04")
                                 .build())))
                 .andExpect(status().isBadRequest())
@@ -87,7 +87,7 @@ class BankApplicationTests {
                                 .amount(500L).
                                 cardNumber("6104337722156021").
                                 otp(5650).
-                                cvv2("478").
+                                cvv2(478).
                                 expireTime("05-04")
                                 .build())))
                 .andExpect(status().isUnauthorized());

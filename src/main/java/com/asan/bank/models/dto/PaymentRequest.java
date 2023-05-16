@@ -15,8 +15,7 @@ public class PaymentRequest  {
     @Pattern(regexp = "\\d{16}" , message = "Card Number Must Have 16 Digit")
     private String cardNumber;
 
-    @Size(min = 3 , max = 4 , message = "CVV2 must have 4 digit")
-    private String cvv2;
+    private Integer cvv2;
 
     @Pattern(regexp = "\\d{2}-\\d{2}" , message = "expire time must be like 05-04")
     private String expireTime;

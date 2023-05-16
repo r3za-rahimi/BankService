@@ -24,6 +24,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
+        System.err.println(req.getHeader("Authorization"));
         if ((req.getHeader("Authorization") == null) || !authService.isTokenValid(req.getHeader("Authorization")).getIsValid()) {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized - Please Log In");
 

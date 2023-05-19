@@ -23,16 +23,4 @@ public class JwtService {
 
     }
 
-    public boolean validUser(String token) {
-
-        if (token.equalsIgnoreCase("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhcmVyem9vZWVvIiwiZXhwIjoxNjgzOTY3NjEyLCJpYXQiOjE2ODM5NjQ2MTJ9.wOf0dm7ui0dGZACX_5p0IsnzPEBQ4R2xjTZrdhxMgUkcHOSpb1By08YNwkCGtuJXgvySgQaUXvtV42zCD_RJEg")) {
-            return true;
-
-
-        } else return false;
-
-
-//        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhcmVyem9vZWVvIiwiZXhwIjoxNjgzOTY3NjEyLCJpYXQiOjE2ODM5NjQ2MTJ9.wOf0dm7ui0dGZACX_5p0IsnzPEBQ4R2xjTZrdhxMgUkcHOSpb1By08YNwkCGtuJXgvySgQaUXvtV42zCD_RJEg"
-
-    }
     }

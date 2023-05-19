@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/bank")
 public class TransactionController extends AbstractController<Transaction, TransactionService> {
     @PostMapping("/payment")
-    public ResponseEntity<Response> doPayment(@Valid @RequestBody PaymentRequest request , HttpServletRequest httpRequest) {
-
+    public ResponseEntity<Response> doPayment(@Valid @RequestBody PaymentRequest request ) {
         service.payment(request);
         return new ResponseEntity<>(new Response("success transaction"),HttpStatus.ACCEPTED);
     }
@@ -28,7 +27,7 @@ public class TransactionController extends AbstractController<Transaction, Trans
         return new ResponseEntity<>(new Response("success transaction"),HttpStatus.ACCEPTED);
     }
     @PostMapping("/sheba")
-    public ResponseEntity<Response> doSheba(  @Valid @RequestBody ShebaPayaRequest request) {
+    public ResponseEntity<Response> doSheba(  @Valid @RequestBody ShebaPayaRequest request ) {
 
         service.sheba(request);
         return new ResponseEntity<>(new Response("success transaction"),HttpStatus.ACCEPTED);

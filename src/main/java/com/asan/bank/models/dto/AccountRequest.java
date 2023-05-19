@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ public class AccountRequest  {
     private String sourceAccountNumber;
 
     @Pattern(regexp = "\\d{10}" , message = " Destination Account Number Must Have 10 Digit")
-    private String DestinationAccountNumber;
+    private String destinationAccountNumber;
 
     private Long amount;
 
